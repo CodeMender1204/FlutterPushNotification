@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application_demo/pages/Home.dart';
 import 'package:flutter_application_demo/pages/login.dart';
 import 'firebase_options.dart';
 
@@ -14,7 +16,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   print("Handling a background message: ${message.messageId}");
 }
-
+bool userauth = false;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -32,6 +34,15 @@ Future<void> main() async {
 
     if (message.notification != null) {
       print('Message also contained a notification: ${message.notification}');
+    }
+  });
+  FirebaseAuth.instance
+  .authStateChanges()
+  .listen((User? user) {
+    if (user == null) {
+     userauth = false;
+    } else {
+      userauth = true;
     }
   });
   final fcmToken = await FirebaseMessaging.instance.getToken();

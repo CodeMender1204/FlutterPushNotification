@@ -30,8 +30,8 @@ Future<void> main() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-
+    print('Message data: ${message.notification?.title}');
+    
     if (message.notification != null) {
       print('Message also contained a notification: ${message.notification}');
     }
@@ -46,9 +46,11 @@ Future<void> main() async {
     }
   });
   final fcmToken = await FirebaseMessaging.instance.getToken();
-  print('Message data: $fcmToken');
+  //print('Message data: $fcmToken');
   runApp(const MyApp());
 }
+
+
 
 Future<void> requestNotificationPermission() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
